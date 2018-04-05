@@ -81,6 +81,7 @@ class Money(amountArg: Int, currencyArg: String){
     }
 
     fun convert (convertTo: String): Money{                    //check if the convert to is the same as the current currency
+        var newMoney = Money(this.amount, this.currency) 
         if(this.currency != convertTo){
             var x:Int = this.amount
             var xDollars:Int = this.amount
@@ -94,8 +95,8 @@ class Money(amountArg: Int, currencyArg: String){
             }
             if(convertTo == "USD"){
 
-                this.amount = xDollars;
-                this.currency = "USD"
+                newMoney.amount = xDollars;
+                newMoney.currency = "USD"
 
             } else {
                 for((k,v)in currencyRates){
@@ -103,30 +104,28 @@ class Money(amountArg: Int, currencyArg: String){
                         x = xDollars * v.second / k.second
                     }
                 }
-                this.amount = x;
-                this.currency = convertTo
+                newMoney.amount = x;
+                newMoney.currency = convertTo
 
             }
         }
-        return (this)
+        return (newMoney)
     }
 
-    operator fun plus (other: Money): Money{
+    operator fun plus (otherCur: Money): Money{
         val firstCurrency:String = this.currency
-        var newMoney = Money(this.amount, this.currency)
-        if (other.currency == firstCurrency){
-            newMoney.amount = this.amount+other.amount
+        var newMoney = Money(this.amount, firstCurrency)
+        if (otherCur.currency == firstCurrency){
+            newMoney.amount = this.amount+ otherCur.amount
         } else {
-            newMoney.amount = this.amount + other.convert(firstCurrency).amount
+            newMoney.amount = this.amount + otherCur.convert(firstCurrency).amount /*other.convert(firstCurrency).amount*/
         }
         return newMoney
     }
-
-
 }
 
-// ============ DO NOT EDIT BELOW THIS LINE =============
 
+// ============ DO NOT EDIT BELOW THIS LINE =============
 print("When tests: ")
 val when_tests = listOf(
     "Hello" to "world",
@@ -139,7 +138,7 @@ val when_tests = listOf(
     17.0 to "I don't understand"
 )
 for ((k,v) in when_tests) {
-    print(if (whenFn(k) == v) "." else "!")             
+    print(if (whenFn(k) == v) "." else "!")
 }
 println("")
 
@@ -178,10 +177,8 @@ println("")
 print("Person tests: ")
 val p1 = Person("Ted", "Neward", 47)
 print(if (p1.firstName == "Ted") "." else "!")
-print("changing age to 48")
 p1.age = 48
-print("new age: ${p1.age}")
-print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!${p1.debugString}")
+print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!")
 println("")
 
 print("Money tests: ")
@@ -208,6 +205,6 @@ val moneyadd_tests = listOf(
 )
 for ( (pair, result) in moneyadd_tests) {
     print(if ((pair.first + pair.second).amount == result.amount &&
-              (pair.first + pair.second).currency == result.currency) "." else "! ${(pair.first + pair.second).amount} and ${(pair.first + pair.second).currency} ")
+              (pair.first + pair.second).currency == result.currency) "." else "! ${pair.first.currency}")
 }
 println("")
