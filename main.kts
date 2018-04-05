@@ -32,11 +32,21 @@ fun mathOp(x: Int, y: Int, oper:(x: Int, y:Int)-> Int):Int{
 }
 
 // write a class "Person" with first name, last name and age
-class Person(firstName: String, lastName: String, age: Int){
-    val firstName = firstName
-    val lastName = lastName
-    var age = age
+class Person(val firstName: String, val lastName: String, age: Int){
+    var age: Int = age
+    get() = field
+    set(value){
+        field = value
+    }
+
     val debugString = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+    // fun verifyAge(age: Int): Int {
+    //     if (this.age < 0) {
+    //         throw Exception("age cannot be below 0")
+    //     } else {
+    //         return age
+    //     }
+    // }
 }
 
 // write a class "Money"
@@ -178,7 +188,7 @@ print("Person tests: ")
 val p1 = Person("Ted", "Neward", 47)
 print(if (p1.firstName == "Ted") "." else "!")
 p1.age = 48
-print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "!")
+print(if (p1.debugString == "[Person firstName:Ted lastName:Neward age:48]") "." else "! ${p1.debugString}")
 println("")
 
 print("Money tests: ")
